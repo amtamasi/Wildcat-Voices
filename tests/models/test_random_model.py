@@ -20,8 +20,6 @@ class RandomModelTester(unittest.TestCase):
     def test_predict(self):
         pass
 
-        #self.assertIsInstance(, ) 
-
 
 if __name__ == "__main__":
     unittest.main()
