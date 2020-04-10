@@ -4,7 +4,9 @@
 CS 499 Senior Project for the University of Kentucky. The Wildcat Voices project aims to predict the location of a speaker, given short audio samples.
 
 ## Running Unit Tests
-We use the unittest library that comes with Python for unit testing. You can run the command:   
+We use the unittest library that comes with Python for unit testing. You can navigate to the root of the project  
+`cd ~/path/to/Wildcat-Voices/`  
+and run the command:   
 `python -m unittest discover`  
 to run all unit tests in the tests/ subdirectory.
 
