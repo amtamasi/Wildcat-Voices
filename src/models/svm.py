@@ -14,12 +14,14 @@ class SVM(BaseModel):
         self.max_iter = -1
         self.kernel_type = 'rbf'
         self.reg_param = 1.0
-        self.model = svm.SVC()
+        self.model = None
+        self.save_model
 
     # Trains the model on the data
-    # This function should be in the base model
+    # This function implements a virtual function in the base model
     def train(self):
-        pass
+        X_data, labels = self.get_data()
+        self.model.fit(X_data, labels)
 
     # This function should probably be in the base model
     # and have it be the same for all models
@@ -33,6 +35,11 @@ class SVM(BaseModel):
 
         # Return the prediction
         pass
+
+    # This function will recreate the SVM model with any new parameters
+    # The model will need to be trained again after this function is called
+    def save_model(self):
+        self.model = svm.SVC(C=self.reg_param, kernel=self.kernel_type, max_iter=self.max_iter)
 
     def set_kernel(self, kernel):
         self.kernel_type = kernel
