@@ -16,13 +16,11 @@ class BaseModel():
 
     # This function is not implemented here and is a virtual
     # function and every child class must implement this function
-    @abc.abstractmethod
     def predict(self):
         raise NotImplementedError()
 
     # This function is not implemented here and is a virtual
     # function and every child class must implement this function
-    @abc.abstractmethod
     def save_model(self):
         raise NotImplementedError()
 
