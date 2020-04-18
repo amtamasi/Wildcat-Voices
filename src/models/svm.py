@@ -19,6 +19,7 @@ class SVM(BaseModel):
 
     # Trains the model on the data
     # This function implements a virtual function in the base model
+    # This function will get the
     def train(self):
         X_data, labels = self.get_data()
         self.model.fit(X_data, labels)
