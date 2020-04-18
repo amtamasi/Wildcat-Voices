@@ -29,7 +29,7 @@ class BaseModel():
     def get_data(self):
         pass
 
-    # This function will process the audio file to minimize noise
-    # and have some consistentcy with the audio files
-    def preprocess_data(self):
+    # This function will return the labels that are in the
+    # training data
+    def get_labels(self):
         pass
