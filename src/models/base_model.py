@@ -3,11 +3,17 @@
     This is the parent class for all machine learning models
 """
 
+import numpy as np
+from sklearn.model_selection import test_train_split
 
 class BaseModel():
 
     def __init__(self):
         self.labels = []
+        self.x_train = None
+        self.x_test = None
+        self.y_train = None
+        self.y_test = None
 
     # This function is not implemented here and is a virtual
     # function and every child class must implement this function
@@ -26,8 +32,9 @@ class BaseModel():
 
     # This function will get the data that is needed to train
     # the model
-    def get_data(self):
-        pass
+    def get_data(self, test_size=0.2):
+        # Find the best way to get X and Y from the data
+        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(X, Y, test_size)
 
     # This function will return the labels that are in the
     # training data
