@@ -7,7 +7,7 @@
 class BaseModel():
 
     def __init__(self):
-        pass
+        self.labels = []
 
     # This function is not implemented here and is a virtual
     # function and every child class must implement this function
@@ -32,4 +32,8 @@ class BaseModel():
     # This function will return the labels that are in the
     # training data
     def get_labels(self):
-        pass
+        if len(self.labels) == 0:
+            print("There are currently no labels. Read in the data to get labels for the data.")
+            return None
+        else:
+            return self.labels
