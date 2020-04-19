@@ -13,7 +13,7 @@ class NeuralNetModel(BaseModel):
         self.model = None
 
         #Data
-        self.num_classes = len(self.classes)
+        self.num_classes = len(self.labels)
         self.x_train = None
         self.x_test = None
         self.y_train = None
@@ -66,6 +66,8 @@ class NeuralNetModel(BaseModel):
     def train(self):
         history = self.model.fit(self.x_train, self.y_train, epochs=self.num_epochs, validation_data=(self.x_test, self.y_test))
         test_loss, test_acc = self.model.evaluate(self.x_test, self.y_test)
+
+        return test_acc
 
 
     def predict(self, single_sample_x):
