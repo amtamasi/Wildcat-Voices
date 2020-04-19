@@ -4,7 +4,8 @@
 """
 
 import numpy as np
-from sklearn.model_selection import test_train_split
+import pandas as pd
+from sklearn.model_selection import train_test_split
 
 class BaseModel():
 
@@ -34,6 +35,11 @@ class BaseModel():
     # the model
     def get_data(self, test_size=0.2):
         # Find the best way to get X and Y from the data
+        labels = []
+        data_labels = np.genfromtxt('data/gmu-audio.txt',skip_header=1,  delimiter='\n', dtype=None, encoding=None)
+        for label in range(len(data_labels)):
+            labels.append(data_labels[label].split(', '))
+        print(labels)
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(X, Y, test_size)
 
     # This function will return the labels that are in the

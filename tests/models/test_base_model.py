@@ -27,7 +27,7 @@ class BaseModelTester(unittest.TestCase):
             self.test_model.save_model()
 
     def test_get_data(self):
-        pass
+        self.test_model.get_data()
 
     def test_get_labels_empty(self):
         expected_return_labels = None
