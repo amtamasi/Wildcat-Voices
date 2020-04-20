@@ -13,14 +13,14 @@ class SVMModelTester(unittest.TestCase):
     def setUp(self):
         self.test_model = SVM()
 
-    @mock.patch('src.models.svm.get_data')
+    @mock.patch('src.models.svm')
     @mock.patch('src.models.svm.svm.SVC.fit')
     @mock.patch('src.models.svm.svm.SVC.score')
     def test_train(self, mock_score, mock_fit, mock_data):
         # Check that self.get_data was called
         # Check that self.model.fit was called with given parameters
         expected_output = 0.8
-        mock_data.return_value = None
+        mock_data.get_data.return_value = None
         mock_fit.return_value = None
         mock_score.return_value = 0.8
         self.test_model.x_train = [[0,0,0,1,1,1,0],[0,0,0,1,1,1,0]]
