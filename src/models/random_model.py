@@ -7,10 +7,10 @@ from .base_model import BaseModel
 
 class RandomModel(BaseModel):
     def __init__(self):
-        self.classes = []
-    
+        super().__init__()
+
     def train(self):
         return "No training needed for this model"
 
     def predict(self):
-        return random.choice(self.classes)
+        return random.choice(self.labels)
