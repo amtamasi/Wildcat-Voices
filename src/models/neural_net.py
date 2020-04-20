@@ -38,9 +38,9 @@ class NeuralNetModel(BaseModel):
             metrics=['accuracy']
         )
 
-        return model
+        self.model = model
 
-    def save_model(self, model_file_name=None, weights_file_name=None):
+    def save_model(self, model_file_name='model.json', weights_file_name='weights.h5'):
         #Serialize model architecture to JSON
         model_json = self.model.to_json()
         with open(model_file_name, 'w') as json_file:
@@ -50,7 +50,7 @@ class NeuralNetModel(BaseModel):
         self.model.save_weights(weights_file_name)
         
 
-    def load_model(self, model_file_name=None, weights_file_name=None):
+    def load_model(self, model_file_name='model.json', weights_file_name='weights.h5'):
         #Load model architecture 
         json_file = open(model_file_name)
         loaded_json_model = json_file.read()
@@ -60,7 +60,7 @@ class NeuralNetModel(BaseModel):
         loaded_model = keras.models.model_from_json(loaded_json_model)
         loaded_model.load_weights(weights_file_name)
 
-        return loaded_model
+        self.model = loaded_model
 
 
     def train(self):
@@ -87,11 +87,11 @@ if __name__ == "__main__":
     nn_model.build_model()
     nn_model.get_data("database_file")
     nn_model.train()
-    nn_model.save_model("model_filename")
+    nn_model.save_model("model.json", "weights.h5")
 
     #Later on, when you want to predict
     NN_model = NeuralNetModel()
-    NN_model.load_model("model_filename")
+    NN_model.load_model("model.json", "weights.h5")
     prediction = NN_model.predict(sample audio)
     print("Neural Net model's prediction:", prediction)
 '''
