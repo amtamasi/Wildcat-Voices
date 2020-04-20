@@ -16,9 +16,6 @@ class NeuralNetModelTester(unittest.TestCase):
         output_type = model.train()
         self.assertIsInstance(output_type, float)
 
-    def test_predict(self):
-        pass
-
 
 if __name__ == "__main__":
     unittest.main()
