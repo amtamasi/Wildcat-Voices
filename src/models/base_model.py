@@ -37,9 +37,13 @@ class BaseModel():
     def get_data(self, test_size=0.2):
         all_data_labels = []
         X = []
+        # Get the metadata from the audio files
         data_labels = np.genfromtxt('data/gmu-audio.txt',skip_header=1,  delimiter='\n', dtype=None, encoding=None)
         for data in range(len(data_labels)):
             all_data_labels.append(data_labels[data].split(', '))
+        # Filter out any files that are from outside the USA
+        # Extracts the features from the audio file and stores them
+        # Gets the state the soeaker is from for the label
         for label in range(len(all_data_labels)):
             data = all_data_labels[label]
             if data[len(data)-1] == 'usa,':
@@ -47,12 +51,14 @@ class BaseModel():
                 samp_rate, audio_data = wavfile.read(file_path)
                 X.append(audio_data.tolist())
                 self.labels.append(data[len(data)-2])
-        #print(X)
+        # Splits the data up for training and testing the machine learning models
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(X, self.labels, test_size=test_size)
 
     # This function will return the labels that are in the
     # training data
     def get_labels(self):
+        # Checks that there are labels
+        # If not tells the user that there is currently no data
         if len(self.labels) == 0:
             print("There are currently no labels. Read in the data to get labels for the data.")
             return None
