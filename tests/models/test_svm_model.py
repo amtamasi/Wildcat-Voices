@@ -3,6 +3,8 @@
 """
 
 import unittest
+import mock
+
 from sklearn import svm
 from src.models.svm import SVM
 
@@ -16,10 +18,20 @@ class SVMModelTester(unittest.TestCase):
         # Check that self.model.fit was called with given parameters
         pass
 
-    def test_predict(self):
+    @mock.patch('src.models.svm.wavfile')
+    @mock.patch('src.models.svm.svm.SVC.fit')
+    @mock.patch('src.models.svm.svm.SVC.predict')
+    def test_predict(self, mock_predict, mock_fit, mock_wav):
         # Check that reading the file was called
         # Check that self.model.predict was called with given parameters
-        pass
+        expected_output = ['kentucky']
+        mock_wav.read.return_value = (12, [0,0,0,1,1,1,0])
+        mock_fit.return_value = None
+        mock_predict.return_value = ['kentucky']
+        self.test_model.model.fit([[0,0,0,1,1,1,0],[0,0,0,1,1,1,0],[0,0,0,1,1,1,0]], ['kentucky','kentucky','kentucky]'])
+        actual_output = self.test_model.predict('test_file.wav')
+        self.assertEqual(actual_output, expected_output)
+        mock_predict.assert_called_with([[0,0,0,1,1,1,0]])
 
     def test_save_model(self):
         kernel = 'sigmoid'

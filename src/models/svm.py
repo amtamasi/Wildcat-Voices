@@ -5,8 +5,7 @@
 
 from .base_model import BaseModel
 from sklearn import svm
-# This can be used to read in the audio file
-# possible that this gets used in the BaseModel class
+
 from scipy.io import wavfile
 
 class SVM(BaseModel):
@@ -20,8 +19,9 @@ class SVM(BaseModel):
     # This function implements a virtual function in the base model
     # This function will get the
     def train(self):
-        X_data, labels = self.get_data()
-        self.model.fit(X_data, labels)
+        self.get_data()
+        self.model.fit(self.x_train, self.y_train)
+        return self.model.score(self.x_test, self.y_test)
 
     # This function should probably be in the base model
     # and have it be the same for all models
@@ -29,9 +29,9 @@ class SVM(BaseModel):
         # This function will get a prediction given
         # an audio file 
         # Get the file from the database
-
+        samp_rate, audio_data = wavfile.read(filename)
         # Return the prediction
-        pass
+        return self.model.predict([audio_data])
 
     # This function will recreate the SVM model with any new parameters
     # The model will need to be trained again after this function is called
