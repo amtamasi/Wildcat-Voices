@@ -23,15 +23,11 @@ class SVM(BaseModel):
         # Returns the score the model had on the testing data
         return self.model.score(self.x_test, self.y_test)
 
-    # This function should probably be in the base model
-    # and have it be the same for all models
-    def predict(self, filename):
-        # This function will get a prediction given
-        # an audio file 
-        # Get the file from the database
-        samp_rate, audio_data = wavfile.read(filename)
+    # This function takes in a features array that was
+    # already computed and returns the prediction
+    def predict(self, file_data):
         # Return the prediction
-        return self.model.predict([audio_data])
+        return self.model.predict([file_data])[0]
 
     # This function will recreate the SVM model with any new parameters
     # The model will need to be trained again after this function is called

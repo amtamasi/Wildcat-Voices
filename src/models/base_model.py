@@ -5,6 +5,8 @@
 
 import numpy as np
 import pandas as pd
+import librosa
+
 from sklearn.model_selection import train_test_split
 from scipy.io import wavfile
 
@@ -48,8 +50,8 @@ class BaseModel():
             data = all_data_labels[label]
             if data[len(data)-1] == 'usa,':
                 file_path = 'data/gmu/' + data[0] + '.wav'
-                samp_rate, audio_data = wavfile.read(file_path)
-                X.append(audio_data.tolist())
+                #samp_rate, audio_data = wavfile.read(file_path)
+                X.append(self.process_data(file_path))
                 self.labels.append(data[len(data)-2])
         # Splits the data up for training and testing the machine learning models
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(X, self.labels, test_size=test_size)
@@ -64,3 +66,13 @@ class BaseModel():
             return None
         else:
             return self.labels
+
+    def process_data(self, filepath):
+        data, samp_rate = librosa.load(filepath)
+        spec_cent = librosa.feature.spectral_centroid(data, sr=samp_rate)
+        spec_rolloff = librosa.feature.spectral_rolloff(data, sr=samp_rate)
+        spec_bandwidth = librosa.feature.spectral_bandwidth(data, sr=samp_rate)
+        zero_cross = librosa.zero_crossings(data)
+        mfccs = librosa.feature.mfcc(data, sr=samp_rate)
+        chromagram = librosa.feature.chroma_stft(data,sr=samp_rate)
+        return np.array([np.mean(spec_cent), np.mean(spec_rolloff), np.mean(spec_bandwidth), np.mean(zero_cross), np.mean(mfccs), np.mean(chromagram)])
