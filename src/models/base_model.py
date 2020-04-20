@@ -47,6 +47,7 @@ class BaseModel():
                 samp_rate, audio_data = wavfile.read(file_path)
                 X.append(audio_data.tolist())
                 self.labels.append(data[len(data)-2])
+        #print(X)
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(X, self.labels, test_size=test_size)
 
     # This function will return the labels that are in the

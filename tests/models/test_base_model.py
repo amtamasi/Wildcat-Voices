@@ -2,7 +2,9 @@
     This file contains the tests for the base model class
 """
 
+import mock
 import unittest
+import numpy as np
 
 from src.models.base_model import BaseModel
 
@@ -26,8 +28,18 @@ class BaseModelTester(unittest.TestCase):
         with self.assertRaises(exception):
             self.test_model.save_model()
 
-    def test_get_data(self):
+    @mock.patch('src.models.base_model.np')
+    @mock.patch('src.models.base_model.wavfile')
+    @mock.patch('src.models.base_model.train_test_split')
+    def test_get_data(self, mock_split, mock_wav, mock_np):
+        mock_np.genfromtxt.return_value = np.array(["english1, male, pittsburgh, pennsylvania, usa,",
+                                                    "english2, male, lexington, kentucky, usa,",
+                                                    "english3, male, lexington, kentucky, usa,"])
+        mock_wav.read.return_value = (12, np.array([0,0,0,1,1,1,0]))
+        mock_split.return_value = ([[0,0,0,1,1,1,0],[0,0,0,1,1,1,0]], ['kentucky','kentucky'], [[0,0,0,1,1,1,0]], ['kentucky'])
         self.test_model.get_data()
+        mock_np.genfromtxt.assert_called_with('data/gmu-audio.txt',skip_header=1,  delimiter='\n', dtype=None, encoding=None)
+        mock_split.assert_called_with([[0,0,0,1,1,1,0],[0,0,0,1,1,1,0],[0,0,0,1,1,1,0]], ['pennsylvania', 'kentucky', 'kentucky'], test_size=0.2)
 
     def test_get_labels_empty(self):
         expected_return_labels = None
