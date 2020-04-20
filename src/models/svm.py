@@ -10,6 +10,7 @@ from scipy.io import wavfile
 
 class SVM(BaseModel):
     def __init__(self):
+        super().__init__()
         self.max_iter = -1
         self.kernel_type = 'rbf'
         self.reg_param = 1.0

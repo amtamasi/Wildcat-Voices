@@ -10,14 +10,9 @@ from .base_model import BaseModel
 
 class NeuralNetModel(BaseModel):
     def __init__(self):
-        self.model = None
+        super().__init__()
 
-        #Data
-        self.num_classes = len(self.labels)
-        self.x_train = None
-        self.x_test = None
-        self.y_train = None
-        self.y_test = None
+        self.model = None
 
         #Training parameters
         self.num_epochs = 10
