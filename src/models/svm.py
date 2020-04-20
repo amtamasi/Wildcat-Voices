@@ -18,8 +18,6 @@ class SVM(BaseModel):
 
     # Trains the model on the data
     def train(self):
-        # Gets the data from the audio files
-        self.get_data()
         # Fits the model to the training data
         self.model.fit(self.x_train, self.y_train)
         # Returns the score the model had on the testing data
