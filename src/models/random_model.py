@@ -7,7 +7,7 @@ from .base_model import BaseModel
 
 class RandomModel(BaseModel):
     def __init__(self):
-        pass
+        super().__init__()
 
     def train(self):
         return "No training needed for this model"
