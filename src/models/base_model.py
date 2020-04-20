@@ -6,6 +6,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from scipy.io import wavfile
 
 class BaseModel():
 
@@ -34,13 +35,19 @@ class BaseModel():
     # This function will get the data that is needed to train
     # the model
     def get_data(self, test_size=0.2):
-        # Find the best way to get X and Y from the data
-        labels = []
+        all_data_labels = []
+        X = []
         data_labels = np.genfromtxt('data/gmu-audio.txt',skip_header=1,  delimiter='\n', dtype=None, encoding=None)
-        for label in range(len(data_labels)):
-            labels.append(data_labels[label].split(', '))
-        print(labels)
-        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(X, Y, test_size)
+        for data in range(len(data_labels)):
+            all_data_labels.append(data_labels[data].split(', '))
+        for label in range(len(all_data_labels)):
+            data = all_data_labels[label]
+            if data[len(data)-1] == 'usa,':
+                file_path = 'data/gmu/' + data[0] + '.wav'
+                samp_rate, audio_data = wavfile.read(file_path)
+                X.append(audio_data.tolist())
+                self.labels.append(data[len(data)-2])
+        self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(X, self.labels, test_size=test_size)
 
     # This function will return the labels that are in the
     # training data
