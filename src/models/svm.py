@@ -16,11 +16,12 @@ class SVM(BaseModel):
         self.model = svm.SVC(C=self.reg_param, kernel=self.kernel_type, max_iter=self.max_iter)
 
     # Trains the model on the data
-    # This function implements a virtual function in the base model
-    # This function will get the
     def train(self):
+        # Gets the data from the audio files
         self.get_data()
+        # Fits the model to the training data
         self.model.fit(self.x_train, self.y_train)
+        # Returns the score the model had on the testing data
         return self.model.score(self.x_test, self.y_test)
 
     # This function should probably be in the base model
@@ -38,11 +39,14 @@ class SVM(BaseModel):
     def save_model(self):
         self.model = svm.SVC(C=self.reg_param, kernel=self.kernel_type, max_iter=self.max_iter)
 
+    # Sets the kernel type to the given kernel
     def set_kernel(self, kernel):
         self.kernel_type = kernel
-        
+
+    # Sets the maximum iterations to the given number
     def set_max_iterations(self, iterations):
         self.max_iter = iterations
 
+    # Sets the regularization parameter to the given number
     def set_reg_param(self, reg_param):
         self.reg_param = reg_param
