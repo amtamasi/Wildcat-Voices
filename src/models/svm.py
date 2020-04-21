@@ -6,7 +6,7 @@
 from .base_model import BaseModel
 from sklearn import svm
 
-from scipy.io import wavfile
+import pickle
 
 class SVM(BaseModel):
     def __init__(self):
@@ -18,6 +18,7 @@ class SVM(BaseModel):
 
     # Trains the model on the data
     def train(self):
+        self.model = svm.SVC(C=self.reg_param, kernel=self.kernel_type, max_iter=self.max_iter)
         # Fits the model to the training data
         self.model.fit(self.x_train, self.y_train)
         # Returns the score the model had on the testing data
@@ -31,8 +32,13 @@ class SVM(BaseModel):
 
     # This function will recreate the SVM model with any new parameters
     # The model will need to be trained again after this function is called
-    def save_model(self):
-        self.model = svm.SVC(C=self.reg_param, kernel=self.kernel_type, max_iter=self.max_iter)
+    def save_model(self, filename='svm_model.pkl'):
+        with open(filename, 'wb') as pickle_file:
+            pickle.dump(self.model, pickle_file)
+
+    def load_model(self, filename='svm_model.pkl'):
+        with open(filename, 'rb') as pickle_file:
+            self.model = pickle.load(pickle_file)
 
     # Sets the kernel type to the given kernel
     def set_kernel(self, kernel):
