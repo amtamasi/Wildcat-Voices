@@ -33,19 +33,21 @@ class BaseModelTester(unittest.TestCase):
 
     # Mocks out functions that call external libraries
     @mock.patch('src.models.base_model.np')
-    @mock.patch('src.models.base_model.wavfile')
+    @mock.patch('src.models.base_model.BaseModel.process_data')
     @mock.patch('src.models.base_model.train_test_split')
-    def test_get_data(self, mock_split, mock_wav, mock_np):
+    def test_get_data(self, mock_split, mock_data, mock_np):
         # Sets return values for the mocked out functions
         mock_np.genfromtxt.return_value = np.array(["english1, male, pittsburgh, pennsylvania, usa,",
                                                     "english2, male, lexington, kentucky, usa,",
                                                     "english3, male, lexington, kentucky, usa,"])
-        mock_wav.read.return_value = (12, np.array([0,0,0,1,1,1,0]))
+        mock_data.return_value = np.array([0,0,0,1,1,1,0])
         mock_split.return_value = ([[0,0,0,1,1,1,0],[0,0,0,1,1,1,0]], ['kentucky','kentucky'], [[0,0,0,1,1,1,0]], ['kentucky'])
         # Calls the function that is being tested
         self.test_model.get_data()
-        # Checks that the split function was called with the correct parameters
-        mock_split.assert_called_with([[0,0,0,1,1,1,0],[0,0,0,1,1,1,0],[0,0,0,1,1,1,0]], ['pennsylvania', 'kentucky', 'kentucky'], test_size=0.2)
+        self.assertTrue(len(self.test_model.x_train) > 0)
+        self.assertTrue(len(self.test_model.y_train) > 0)
+        self.assertTrue(len(self.test_model.x_test) > 0)
+        self.assertTrue(len(self.test_model.y_test) > 0)
 
     # Tests that the return_labels function will return None
     # when there are no labels

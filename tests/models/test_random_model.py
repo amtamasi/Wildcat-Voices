@@ -8,6 +8,7 @@ from src.models.random_model import RandomModel
 class RandomModelTester(unittest.TestCase):
     def test_classes_not_empty(self):
         model = RandomModel()
+        model.labels = ['ohio', 'kentucky']
         num_classes = len(model.labels)
         self.assertTrue(num_classes > 0)
 
