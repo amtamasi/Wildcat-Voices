@@ -12,7 +12,7 @@ app = Flask(__name__)
 rand_model = RandomModel()
 svm_model = SVM()
 NN_model = NeuralNetModel()
-#NN_model.load_model("model.json", "weights.h5")
+NN_model.load_model("model.json", "weights.h5")
 
 @app.route('/')
 def home():
@@ -23,13 +23,13 @@ def predict():
     # NOTE: request.form.values() needs to be preprocessed audio sample
     #rand_prediction = RandomModel.predict()
     #svm_prediction = svm_model.predict(request.form.values())
-    #NN_prediction = NN_model.predict(request.form.values())
+    NN_prediction = NN_model.predict(request.form.values())
 
     # return prediction
-    #return render_template("index.html", prediction_text="Area of Origin: {}".format(rand_prediction))
+    return render_template("index.html", prediction_text="Area of Origin: {}".format(NN_prediction))
 
     # NOTE: testing
-    return render_template("index.html", prediction_text="Area of Origin: {}".format("Kentucky"))
+    #return render_template("index.html", prediction_text="Area of Origin: {}".format("Kentucky"))
 
 """
 
