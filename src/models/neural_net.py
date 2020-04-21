@@ -26,7 +26,7 @@ class NeuralNetModel(BaseModel):
             keras.layers.Dense(64, activation="relu"),
             keras.layers.Dense(64, activation="relu"),
             keras.layers.Dense(64, activation="relu"),
-            keras.layers.Dense(len(set(self.labels)))
+            keras.layers.Dense(52)
         ])
 
         #"Compile" the model so that it can train on data
@@ -62,22 +62,14 @@ class NeuralNetModel(BaseModel):
 
 
     def train(self):
-        self.x_train = np.asarray(self.x_train)
-        self.y_train = np.asarray(self.y_train)
-        self.x_test = np.asarray(self.x_test)
-        self.y_test = np.asarray(self.y_test)
-        print(self.x_train)
-        print(self.x_test)
-        self.encoder.fit(self.labels)
+        self.x_train = np.array(self.x_train)
+        self.y_train = np.array(self.y_train)
+        self.x_test = np.array(self.x_test)
+        self.y_test = np.array(self.y_test)
+        self.encoder.fit(np.array(self.labels))
         self.y_train = self.encoder.transform(self.y_train)
-        #self.y_train = keras.utils.to_categorical(self.y_train)
-        print(self.y_train.shape)
-        #self.y_train = np.asarray(self.y_train)
-        #self.y_test = keras.utils.to_categorical(self.y_test)
         self.y_test = self.encoder.transform(self.y_test)
-        #self.y_test = keras.utils.to_categorical(self.y_test)
-        #self.y_test = np.asarray(self.y_test)
-        history = self.model.fit(self.x_train, self.y_train, epochs=self.num_epochs, validation_data=(self.x_test, self.y_test))
+        history = self.model.fit(self.x_train, self.y_train, epochs=self.num_epochs, validation_data=(self.x_test, self.y_test), verbose=2)
         test_loss, test_acc = self.model.evaluate(self.x_test, self.y_test)
 
         return test_acc
@@ -89,9 +81,10 @@ class NeuralNetModel(BaseModel):
         '''
         prediction = None
         prediction = self.model.predict( np.array( [single_sample_x] ) )[0]
-        #prediction = np.argmax(prediction)
+        prediction = np.argmax(prediction)
+        prediction = np.array([prediction])
         prediction = self.encoder.inverse_transform(prediction)
-        return prediction
+        return prediction[0]
 
 
 '''Sample code for how to use
