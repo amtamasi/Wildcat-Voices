@@ -2,23 +2,36 @@ import numpy as np
 from flask import Flask, request, jsonify, render_template
 import pickle
 
+from src.models.random_model import RandomModel
+from src.models.svm import SVM
+from src.models.neural_net import NeuralNetModel
+
 app = Flask(__name__)
-model = pickle.load(open('model.pkl', 'rb'))
+#model = pickle.load(open('model.pkl', 'rb'))
+
+rand_model = RandomModel()
+svm_model = SVM()
+NN_model = NeuralNetModel()
+#NN_model.load_model("model.json", "weights.h5")
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/predict',methods=['POST'])
+@app.route('/predict', methods=['POST'])
 def predict():
+    # NOTE: request.form.values() needs to be preprocessed audio sample
+    #rand_prediction = RandomModel.predict()
+    #svm_prediction = svm_model.predict(request.form.values())
+    #NN_prediction = NN_model.predict(request.form.values())
 
-    int_features = [int(x) for x in request.form.values()]
-    final_features = [np.array(int_features)]
-    prediction = model.predict(final_features)
+    # return prediction
+    #return render_template("index.html", prediction_text="Area of Origin: {}".format(rand_prediction))
 
-    output = round(prediction[0], 2)
+    # NOTE: testing
+    return render_template("index.html", prediction_text="Area of Origin: {}".format("Kentucky"))
 
-    return render_template('index.html', prediction_text='Sales should be $ {}'.format(output))
+"""
 
 @app.route('/results',methods=['POST'])
 def results():
@@ -28,6 +41,8 @@ def results():
 
     output = prediction[0]
     return jsonify(output)
+
+"""
 
 if __name__ == "__main__":
     app.run(debug=True)
