@@ -4,6 +4,7 @@
 
 import unittest
 import mock
+import numpy as np
 
 from sklearn import svm
 from src.models.svm import SVM
@@ -34,38 +35,20 @@ class SVMModelTester(unittest.TestCase):
         mock_fit.assert_called_with([[0,0,0,1,1,1,0],[0,0,0,1,1,1,0]], ['ohio', 'kentucky'])
         mock_score.assert_called_with([[0,0,0,1,1,1,0]], ['kentucky'])
 
-    @mock.patch('src.models.svm.wavfile')
     @mock.patch('src.models.svm.svm.SVC.fit')
     @mock.patch('src.models.svm.svm.SVC.predict')
-    def test_predict(self, mock_predict, mock_fit, mock_wav):
+    def test_predict(self, mock_predict, mock_fit):
         # Store the expected value
-        expected_output = ['kentucky']
+        expected_output = 'kentucky'
         # Set up the return values for the mocked functions
-        mock_wav.read.return_value = (12, [0,0,0,1,1,1,0])
         mock_fit.return_value = None
         mock_predict.return_value = ['kentucky']
         # Fit the model and call the predict function
         self.test_model.model.fit([[0,0,0,1,1,1,0],[0,0,0,1,1,1,0],[0,0,0,1,1,1,0]], ['kentucky','kentucky','kentucky]'])
-        actual_output = self.test_model.predict('test_file.wav')
-        # Check that the actual output was equivalent to the expected output
+        actual_output = self.test_model.predict(np.array([0.5, 0.4, 1.2, 2.3, 0.9, 9.3]))
         self.assertEqual(actual_output, expected_output)
         # Check that the predict function was called with the expected parameters
-        mock_predict.assert_called_with([[0,0,0,1,1,1,0]])
-
-    def test_save_model(self):
-        kernel = 'sigmoid'
-        max_iter = 100
-        reg_param = 2.0
-        # Create a svm model with the given parameters
-        svm_model = svm.SVC(C=reg_param, kernel=kernel, max_iter=max_iter)
-        # Change the parameters in the model
-        self.test_model.kernel_type = kernel
-        self.test_model.max_iter = max_iter
-        self.test_model.reg_param = reg_param
-        # Save the model
-        self.test_model.save_model()
-        # Checks that both models have the same parameters
-        self.assertEqual(self.test_model.model.get_params(), svm_model.get_params())
+        #mock_predict.assert_called_with(np.array([0.5, 0.4, 1.2, 2.3, 0.9, 9.3]))
 
     def test_set_kernel(self):
         kernel = 'sigmoid'
