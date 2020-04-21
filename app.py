@@ -1,16 +1,19 @@
 import numpy as np
 from flask import Flask, request, jsonify, render_template
 import pickle
+import sklearn
 
 from src.models.random_model import RandomModel
 from src.models.svm import SVM
 from src.models.neural_net import NeuralNetModel
 
 app = Flask(__name__)
-#model = pickle.load(open('model.pkl', 'rb'))
 
 rand_model = RandomModel()
+
+# BUG: sklearn module error
 svm_model = SVM()
+svm_model.load_model()
 
 # BUG: Threading issues between flask and tensorflow
 #nn_model = NeuralNetModel()
