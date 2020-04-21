@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import numpy as np
 import tensorflow as tf 
 from tensorflow import keras
+from sklearn.preprocessing import LabelEncoder
 
 from .base_model import BaseModel
 
@@ -17,13 +18,15 @@ class NeuralNetModel(BaseModel):
         #Training parameters
         self.num_epochs = 10
 
+        self.encoder = LabelEncoder()
+
     def build_model(self):
         #Define the model architecture
         model = keras.Sequential([
             keras.layers.Dense(64, activation="relu"),
             keras.layers.Dense(64, activation="relu"),
             keras.layers.Dense(64, activation="relu"),
-            keras.layers.Dense(self.num_classes)
+            keras.layers.Dense(52)
         ])
 
         #"Compile" the model so that it can train on data
@@ -59,7 +62,14 @@ class NeuralNetModel(BaseModel):
 
 
     def train(self):
-        history = self.model.fit(self.x_train, self.y_train, epochs=self.num_epochs, validation_data=(self.x_test, self.y_test))
+        self.x_train = np.array(self.x_train)
+        self.y_train = np.array(self.y_train)
+        self.x_test = np.array(self.x_test)
+        self.y_test = np.array(self.y_test)
+        self.encoder.fit(np.array(self.labels))
+        self.y_train = self.encoder.transform(self.y_train)
+        self.y_test = self.encoder.transform(self.y_test)
+        history = self.model.fit(self.x_train, self.y_train, epochs=self.num_epochs, validation_data=(self.x_test, self.y_test), verbose=2)
         test_loss, test_acc = self.model.evaluate(self.x_test, self.y_test)
 
         return test_acc
@@ -71,8 +81,10 @@ class NeuralNetModel(BaseModel):
         '''
         prediction = None
         prediction = self.model.predict( np.array( [single_sample_x] ) )[0]
-
-        return prediction
+        prediction = np.argmax(prediction)
+        prediction = np.array([prediction])
+        prediction = self.encoder.inverse_transform(prediction)
+        return prediction[0]
 
 
 '''Sample code for how to use
